@@ -1,8 +1,8 @@
 #include "sort.h"
 
-void swap(int *a, int *b);
-void quick_sort_recursor(int *array, size_t size, int low, int high);
-int quick_sort_partition(int *array, size_t size, int low, int high);
+void swap(int **array, size_t a, size_t b);
+void quick_sort_recursor(int **array, size_t size, size_t low, size_t high);
+int quick_sort_partition(int **array, size_t size, size_t low, size_t high);
 
 /**
  * quick_sort - implements a quick sort algorithm
@@ -19,24 +19,25 @@ void quick_sort(int *array, size_t size)
 		return;
 	}
 
-	quick_sort_recursor(array, size, 0, size - 1);
+	quick_sort_recursor(&array, size, 0, size - 1);
 }
 
 /**
  * swap - Swaps two integers, a and b
- * @a: Integer to swap
+ * @array: Array containing integers to swap
+ * @a: Inetegr to swap
  * @b: Second integer to sort
  *
  * Return: No return value
  */
 
-void swap(int *a, int *b)
+void swap(int **array, size_t a, size_t b)
 {
 	int temp;
 
-	temp = *a;
-	*a = *b;
-	*b = temp;
+	temp = (*array)[a];
+	(*array)[a] = (*array)[b];
+	(*array)[b] = temp;
 }
 
 /**
@@ -49,16 +50,23 @@ void swap(int *a, int *b)
  * Return: No return value
  */
 
-void quick_sort_recursor(int *array, size_t size, int low, int high)
+void quick_sort_recursor(int **array, size_t size, size_t low, size_t high)
 {
-	if (low < high)
+	size_t x;
+
+	if (low < high && *array)
 	{
-		int pivot = quick_sort_partition(array, size, low, high);
+		x = quick_sort_partition(array, size, low, high);
 
-		quick_sort_recursor(array, size, low, pivot - 1);
-		quick_sort_recursor(array, size, pivot + 1, high);
+		if ((x - low) > 1)
+		{
+			quick_sort_recursor(array, size, low, x - 1);
+		}
+		if ((high - x) > 1)
+		{
+			quick_sort_recursor(array, size, x + 1, high);
+		}
 	}
-
 }
 
 /**
@@ -71,21 +79,29 @@ void quick_sort_recursor(int *array, size_t size, int low, int high)
  * Return: The index of th pivot
  */
 
-int quick_sort_partition(int *array, size_t size, int low, int high)
+int quick_sort_partition(int **array, size_t size, size_t low, size_t high)
 {
-	int pivot = array[high];
-	int j;
-	int i = low;
+	size_t pivot = high;
+	size_t j;
+	size_t i = low;
 
 	for (j = low; j < high; j++)
 	{
-		if (array[j] <= pivot)
+		if ((*array)[j] <= (*array)[pivot])
 		{
-			swap(&array[i], &array[j]);
+			if (i != j)
+			{
+				swap(array, i, j);
+				print_array(*array, size);
+			}
 			i++;
 		}
 	}
-	swap(&array[i], &array[high]);
-	print_array(array, size);
+
+	if (i != j)
+	{
+		swap(array, i, j);
+		print_array(*array, size);
+	}
 	return (i);
 }
