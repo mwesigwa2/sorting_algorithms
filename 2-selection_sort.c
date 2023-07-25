@@ -1,45 +1,56 @@
 #include "sort.h"
+
 /**
-* swap - switches two elements of an array
-* @ind1: index to element in array
-* @ind2: index to element in array
-* Return: nothing
-*/
-void swap(int *ind1, int *ind2)
+ * swap - switches two elements of an array
+ * @array: double pointer to array
+ * @first: index to element in array
+ * @second: index to element in array
+ *
+ * Return: nothing
+ */
+void swap(int **array, size_t first, size_t second)
 {
-	int tmp = *ind1;
-	*ind1 = *ind2;
-	*ind2 = tmp;
+	int tmp;
+
+	tmp = (*array)[first];
+	(*array)[first] = (*array)[second];
+	(*array)[second] = tmp;
 }
 
-
 /**
-* selection_sort - function that sorts an array of integers
-* in ascending order using the selection sort algorithm
-* @array: array to be sorted
-* @size: the size of the array
-* Return: nothing
-*/
-
+ * selection_sort - sorts an array using selection sort
+ * @array: array to be sorted
+ * @size: size of array
+ *
+ * Return: nothing
+ */
 void selection_sort(int *array, size_t size)
 {
-	size_t i, j, min_id;
+	size_t i, j;
+	int min_value, min_ind, swapp;
 
-	for (i = 0; i < size - 1; i++)
+	if (size < 2)
+		return;
+
+	for (i = 0; i < size; i++)
 	{
-		/*find the minimum element in unsorted array*/
-		min_id = i;
+		min_value = array[i];
+		min_ind = i;
+		swapp = 0;
 		for (j = i + 1; j < size; j++)
 		{
-			if (array[j] < array[min_id])
-				min_id = j;
-
-			if (min_id != i)
+			if (min_value > array[j])
 			{
-				swap(&array[min_id], &array[i]);
-				print_array(array, size);
-
+				min_value = array[j];
+				min_ind = j;
+				swapp = 1;
 			}
+
+		}
+		if (swapp)
+		{
+			swap(&array, i, min_ind);
+			print_array(array, size);
 		}
 	}
 }
