@@ -1,5 +1,6 @@
 #include "sort.h"
 
+void swap(int *a, int *b);
 /**
  * bubble_sort - implements bubble sort algorithm
  * @array: array to be sorted
@@ -7,8 +8,6 @@
  *
  * Return: Nothing
  */
-
-void swap(int *a, int *b);
 
 void bubble_sort(int *array, size_t size)
 {
@@ -45,8 +44,9 @@ void bubble_sort(int *array, size_t size)
 
 void swap(int *a, int *b)
 {
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
